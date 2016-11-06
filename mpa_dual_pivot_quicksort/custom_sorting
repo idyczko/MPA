@@ -1,0 +1,110 @@
+module custom_sorting
+export quicksort, dp_quicksort
+
+function quicksort(T)
+  return quicksort(T, 1, length(T));
+end
+
+function dp_quicksort(T)
+  return dp_quicksort(T, 1, length(T));
+end
+
+
+function quicksort(T, left, right)
+  comparisons = 0;
+  swaps = 0;
+  q_1=q_2=[0,0];
+  if(right-left>=1)
+    pivot = T[right];
+    i, j = left-1, right;
+    while(true)
+      while(true)
+        comparisons+=1;
+        i+=1;
+        if(T[i]>=pivot)
+          break;
+        end;
+      end;
+      while(true)
+        comparisons+=1;
+        j-=1;
+        if(j==0 || T[j]<=pivot)
+          break;
+        end;
+      end;
+      if(j>i)
+        swap(T, i, j);
+        swaps+=1;
+      end;
+      comparisons+=2;
+      if(j<=i)
+        break;
+      end;
+    end;
+    swap(T, i, right);
+    swaps+=1;
+    q_1 = quicksort(T, left, i-1);
+    q_2 = quicksort(T, i+1, right);
+  end;
+  return comparisons+q_1[1]+q_2[1], swaps+q_1[2]+q_2[2];
+end
+
+function dp_quicksort(T, left, right)
+  comparisons = swaps = 0;
+  q_1 = q_2 = q_3 = [0, 0];
+  if(left < right)
+    if(T[left]>T[right])
+      swap(T, left, right);
+      swaps+=1;
+    end;
+    comparisons+=1;
+    p=T[left];
+    q=T[right];
+
+    l=left+1;
+    r=right-1;
+    i=l;
+    while(i<=r)
+      comparisons+=2;
+      if(T[i]<p)
+        swap(T, i, l);
+        l+=1;
+        comparisons-=1;
+        swaps+=1;
+      elseif(T[i]>q)
+        while(T[r]>q && i<r)
+          r-=1;
+          comparisons+=1;
+        end;
+        comparisons+=1;
+        swap(T, i, r);
+        swaps+=1;
+        r-=1;
+        if(T[i] < p)
+          swap(T, i, l);
+          swaps+=1;
+          l+=1;
+        end;
+        comparisons+=1;
+      end;
+      i+=1;
+    end;
+    l-=1;
+    r+=1;
+
+    swap(T, left, l);
+    swap(T, right, r);
+    swaps+=2;
+
+    q_1 = dp_quicksort(T, left, l-1);
+    q_2 = dp_quicksort(T, l+1, r-1);
+    q_3 = dp_quicksort(T, r+1, right);
+  end;
+  return comparisons+q_1[1]+q_2[1]+q_3[1], swaps+q_1[2]+q_2[2]+q_3[2];
+end
+
+function swap(T, i, j)
+  T[i], T[j] = T[j], T[i];
+end
+
+end

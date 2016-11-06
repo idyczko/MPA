@@ -1,0 +1,183 @@
+module plots
+export display_plots
+using PyPlot;
+
+function display_plots(L, QS, DPQS, QS_t, DPQS_t, Markov_a, Chebyshev_a)
+
+figure(1);
+plot(L,transpose(QS[1,:]),"b-");
+plot(L,2*L.*log(L), "r-");
+xlabel("Number of elements");
+ylabel("Number of comparisons");
+title("Comparisons for Quicksort algorithm");
+grid("on");
+
+figure(2);
+for i in eachindex(L)
+  scatter(L[i]*ones(size(QS_t)[2]), QS_t[1,:,i], s=10, alpha=0.1, c="b");
+end;
+plot(L,transpose(QS[1,:]),"r-");
+plot(L,transpose(QS[3,:]),"ro");
+plot(L,transpose(QS[4,:]),"ro");
+plot(L,transpose(QS[1,:]+Chebyshev_a*sqrt(QS[2,:])),"k--");
+plot(L,transpose(QS[1,:]-Chebyshev_a*sqrt(QS[2,:])),"k--");
+xlabel("Number of elements");
+ylabel("Number of comparisons");
+title("Comparisons for Quicksort algorithm with Chebyshev's inequality bound");
+grid("on");
+
+figure(3);
+for i in eachindex(L)
+  scatter(L[i]*ones(size(QS_t)[2]), QS_t[1,:,i], s=10, alpha=0.1, c="b");
+end;
+plot(L,transpose(QS[1,:]),"r-");
+plot(L,transpose(QS[3,:]),"ro");
+plot(L,transpose(QS[4,:]),"ro");
+plot(L,transpose(2*QS[1,:]),"k--");
+xlabel("Number of elements");
+ylabel("Number of comparisons");
+title("Comparisons for Quicksort algorithm with Markov's inequality bound");
+grid("on");
+
+figure(4);
+plot(L,transpose(QS[5,:]),"b-");
+plot(L,(1/3)*L.*log(L), "r-");
+xlabel("Number of elements");
+ylabel("Number of swaps");
+title("Swaps for Quicksort algorithm");
+grid("on");
+
+figure(5);
+for i in eachindex(L)
+  scatter(L[i]*ones(size(QS_t)[2]), QS_t[2,:,i], s=10, alpha=0.1, c="b");
+end;
+plot(L,transpose(QS[5,:]),"r-");
+plot(L,transpose(QS[7,:]),"ro");
+plot(L,transpose(QS[8,:]),"ro");
+plot(L,transpose(QS[5,:]+Chebyshev_a*sqrt(QS[6,:])),"k--");
+plot(L,transpose(QS[5,:]-Chebyshev_a*sqrt(QS[6,:])),"k--");
+xlabel("Number of elements");
+ylabel("Number of swaps");
+title("Swaps for Quicksort algorithm with Chebyshev's inequality bound");
+grid("on");
+
+figure(6);
+for i in eachindex(L)
+  scatter(L[i]*ones(size(QS_t)[2]), QS_t[2,:,i], s=10, alpha=0.1, c="b");
+end;
+plot(L,transpose(QS[5,:]),"r-");
+plot(L,transpose(QS[7,:]),"ro");
+plot(L,transpose(QS[8,:]),"ro");
+plot(L,transpose(2*QS[5,:]),"k--");
+xlabel("Number of elements");
+ylabel("Number of swaps");
+title("Swaps for Quicksort algorithm with Markow's inequality bound");
+grid("on");
+
+figure(7);
+plot(L,transpose(DPQS[1,:]),"b-");
+plot(L,2*L.*log(L), "r-");
+xlabel("Number of elements");
+ylabel("Number of comparisons");
+title("Comparisons for Dual-Pivot Quicksort algorithm");
+grid("on");
+
+figure(8);
+for i in eachindex(L)
+  scatter(L[i]*ones(size(DPQS_t)[2]), DPQS_t[1,:,i], s=10, alpha=0.1, c="b");
+end;
+plot(L,transpose(DPQS[1,:]),"r-");
+plot(L,transpose(DPQS[3,:]),"ro");
+plot(L,transpose(DPQS[4,:]),"ro");
+plot(L,transpose(DPQS[1,:]+Chebyshev_a*sqrt(DPQS[2,:])),"k--");
+plot(L,transpose(DPQS[1,:]-Chebyshev_a*sqrt(DPQS[2,:])),"k--");
+xlabel("Number of elements");
+ylabel("Number of comparisons");
+title("Comparisons for Dual-Pivot Quicksort algorithm with Chebyshev's inequality bound");
+grid("on");
+
+figure(9);
+for i in eachindex(L)
+  scatter(L[i]*ones(size(DPQS_t)[2]), DPQS_t[1,:,i], s=10, alpha=0.1, c="b");
+end;
+plot(L,transpose(DPQS[1,:]),"r-");
+plot(L,transpose(DPQS[3,:]),"ro");
+plot(L,transpose(DPQS[4,:]),"ro");
+plot(L,transpose(2*DPQS[1,:]),"k--");
+xlabel("Number of elements");
+ylabel("Number of comparisons");
+title("Comparisons for Dual-Pivot Quicksort algorithm with Markov's inequality bound");
+grid("on");
+
+figure(10);
+plot(L,transpose(DPQS[5,:]),"b-");
+plot(L,(1/3)*L.*log(L), "r-");
+xlabel("Number of elements");
+ylabel("Number of swaps");
+title("Swaps for Dual-Pivot Quicksort algorithm");
+grid("on");
+
+figure(11);
+for i in eachindex(L)
+  scatter(L[i]*ones(size(DPQS_t)[2]), DPQS_t[2,:,i], s=10, alpha=0.1, c="b");
+end;
+plot(L,transpose(DPQS[5,:]),"r-");
+plot(L,transpose(DPQS[7,:]),"ro");
+plot(L,transpose(DPQS[8,:]),"ro");
+plot(L,transpose(DPQS[5,:]+Chebyshev_a*sqrt(DPQS[6,:])),"k--");
+plot(L,transpose(DPQS[5,:]-Chebyshev_a*sqrt(DPQS[6,:])),"k--");
+xlabel("Number of elements");
+ylabel("Number of swaps");
+title("Swaps for Dual-Pivot Quicksort algorithm with Chebyshev's inequality bound");
+grid("on");
+
+figure(12);
+for i in eachindex(L)
+  scatter(L[i]*ones(size(DPQS_t)[2]), DPQS_t[2,:,i], s=10, alpha=0.1, c="b");
+end;
+plot(L,transpose(DPQS[5,:]),"r-");
+plot(L,transpose(DPQS[7,:]),"ro");
+plot(L,transpose(DPQS[8,:]),"ro");
+plot(L,transpose(2*DPQS[5,:]),"k--");
+xlabel("Number of elements");
+ylabel("Number of swaps");
+title("Swaps for Dual-Pivot Quicksort algorithm with Markow's inequality bound");
+grid("on");
+
+###########################################################
+# Comparison between theoretical and experimental results #
+###########################################################
+figure(13);
+plot(L,1.9*L.*log(L),"b-");
+plot(L,2*L.*log(L),"r-");
+xlabel("Number of elements");
+ylabel("Number of comparisons");
+title("Comparison of theoretical results");
+grid("on");
+
+figure(14);
+plot(L,transpose(DPQS[1,:]),"b-");
+plot(L,transpose(QS[1,:]),"r-");
+xlabel("Number of elements");
+ylabel("Number of comparisons");
+title("Comparison of experimental results");
+grid("on");
+
+figure(15);
+plot(L,0.6*L.*log(L),"b-");
+plot(L,(1/3)*L.*log(L),"r-");
+xlabel("Number of elements");
+ylabel("Number of swaps");
+title("Comparison of theoretical results");
+grid("on");
+
+figure(16);
+plot(L,transpose(DPQS[5,:]),"b-");
+plot(L,transpose(QS[5,:]),"r-");
+xlabel("Number of elements");
+ylabel("Number of swaps");
+title("Comparison of experimental results");
+grid("on");
+end
+
+end

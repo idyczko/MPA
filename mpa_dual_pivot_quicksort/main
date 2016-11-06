@@ -1,0 +1,44 @@
+include("custom_sorting");
+include("plots");
+
+using custom_sorting;
+using plots;
+
+Markov_a = 2; #Coefficient a (will be multiplied by expected value)
+Chebyshev_a = 2; #Coefficient a (will be multiplied by standard deviation)
+Chernoff_a = 2; #Coefficient a (will be multiplied by expected value)
+
+attempts=1000;
+L=[0:1000:10000]; #input data size range
+
+QS=zeros(8, length(L));
+DPQS=zeros(8, length(L));
+QS_t = zeros(2, attempts, length(L));
+DPQS_t = zeros(2, attempts, length(L));
+
+for l in eachindex(L)
+
+  for a = 1:attempts
+    permutation = randperm(L[l]);
+    DPQS_t[1,a,l], DPQS_t[2,a,l] = custom_sorting.dp_quicksort(copy(permutation));
+    QS_t[1,a,l], QS_t[2,a,l] = custom_sorting.quicksort(copy(permutation));
+  end;
+  QS[1,l]=sum(QS_t[1,:,l])/attempts;
+  QS[2,l]=(sum((QS_t[1,:,l]-QS[1,l]).*(QS_t[1,:,l]-QS[1,l]))/attempts);
+  QS[3,l]=maximum(QS_t[1,:,l]);
+  QS[4,l]=minimum(QS_t[1,:,l]);
+  QS[5,l]=sum(QS_t[2,:,l])/attempts;
+  QS[6,l]=(sum((QS_t[2,:,l]-QS[5,l]).*(QS_t[2,:,l]-QS[5,l]))/attempts);
+  QS[7,l]=maximum(QS_t[2,:,l]);
+  QS[8,l]=minimum(QS_t[2,:,l]);
+  DPQS[1,l]=sum(DPQS_t[1,:,l])/attempts;
+  DPQS[2,l]=(sum((DPQS_t[1,:,l]-DPQS[1,l]).*(DPQS_t[1,:,l]-DPQS[1,l]))/attempts);
+  DPQS[3,l]=maximum(DPQS_t[1,:,l]);
+  DPQS[4,l]=minimum(DPQS_t[1,:,l]);
+  DPQS[5,l]=sum(DPQS_t[2,:,l])/attempts;
+  DPQS[6,l]=(sum((DPQS_t[2,:,l]-DPQS[5,l]).*(DPQS_t[2,:,l]-DPQS[5,l]))/attempts);
+  DPQS[7,l]=maximum(DPQS_t[2,:,l]);
+  DPQS[8,l]=minimum(DPQS_t[2,:,l]);
+end;
+
+plots.display_plots(L, QS, DPQS, QS_t, DPQS_t, Markov_a, Chebyshev_a);
