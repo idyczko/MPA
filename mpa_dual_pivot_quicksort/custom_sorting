@@ -36,7 +36,6 @@ function quicksort(T, left, right)
         swap(T, i, j);
         swaps+=1;
       end;
-      comparisons+=2;
       if(j<=i)
         break;
       end;
@@ -89,6 +88,8 @@ function dp_quicksort(T, left, right)
       end;
       i+=1;
     end;
+    comparisons+=1;
+
     l-=1;
     r+=1;
 

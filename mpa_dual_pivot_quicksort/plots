@@ -4,6 +4,8 @@ using PyPlot;
 
 function display_plots(L, QS, DPQS, QS_t, DPQS_t, Markov_a, Chebyshev_a)
 
+#xkcd() #:)
+
 figure(1);
 plot(L,transpose(QS[1,:]),"b-");
 plot(L,2*L.*log(L), "r-");
@@ -23,7 +25,7 @@ plot(L,transpose(QS[1,:]+Chebyshev_a*sqrt(QS[2,:])),"k--");
 plot(L,transpose(QS[1,:]-Chebyshev_a*sqrt(QS[2,:])),"k--");
 xlabel("Number of elements");
 ylabel("Number of comparisons");
-title("Comparisons for Quicksort algorithm with Chebyshev's inequality bound");
+title("Comparisons for Quicksort algorithm with Chebyshev's inequality bound coefficient: "*string(Chebyshev_a));
 grid("on");
 
 figure(3);
@@ -36,7 +38,7 @@ plot(L,transpose(QS[4,:]),"ro");
 plot(L,transpose(2*QS[1,:]),"k--");
 xlabel("Number of elements");
 ylabel("Number of comparisons");
-title("Comparisons for Quicksort algorithm with Markov's inequality bound");
+title("Comparisons for Quicksort algorithm with Markov's inequality bound coefficient: "*string(Markov_a));
 grid("on");
 
 figure(4);
@@ -58,7 +60,7 @@ plot(L,transpose(QS[5,:]+Chebyshev_a*sqrt(QS[6,:])),"k--");
 plot(L,transpose(QS[5,:]-Chebyshev_a*sqrt(QS[6,:])),"k--");
 xlabel("Number of elements");
 ylabel("Number of swaps");
-title("Swaps for Quicksort algorithm with Chebyshev's inequality bound");
+title("Swaps for Quicksort algorithm with Chebyshev's inequality bound coefficient: "*string(Chebyshev_a));
 grid("on");
 
 figure(6);
@@ -71,12 +73,12 @@ plot(L,transpose(QS[8,:]),"ro");
 plot(L,transpose(2*QS[5,:]),"k--");
 xlabel("Number of elements");
 ylabel("Number of swaps");
-title("Swaps for Quicksort algorithm with Markow's inequality bound");
+title("Swaps for Quicksort algorithm with Markov's inequality bound coefficient: "*string(Markov_a));
 grid("on");
 
 figure(7);
 plot(L,transpose(DPQS[1,:]),"b-");
-plot(L,2*L.*log(L), "r-");
+plot(L,1.9*L.*log(L), "r-");
 xlabel("Number of elements");
 ylabel("Number of comparisons");
 title("Comparisons for Dual-Pivot Quicksort algorithm");
@@ -93,7 +95,7 @@ plot(L,transpose(DPQS[1,:]+Chebyshev_a*sqrt(DPQS[2,:])),"k--");
 plot(L,transpose(DPQS[1,:]-Chebyshev_a*sqrt(DPQS[2,:])),"k--");
 xlabel("Number of elements");
 ylabel("Number of comparisons");
-title("Comparisons for Dual-Pivot Quicksort algorithm with Chebyshev's inequality bound");
+title("Comparisons for Dual-Pivot Quicksort algorithm with Chebyshev's inequality bound coefficient: "*string(Chebyshev_a));
 grid("on");
 
 figure(9);
@@ -106,12 +108,12 @@ plot(L,transpose(DPQS[4,:]),"ro");
 plot(L,transpose(2*DPQS[1,:]),"k--");
 xlabel("Number of elements");
 ylabel("Number of comparisons");
-title("Comparisons for Dual-Pivot Quicksort algorithm with Markov's inequality bound");
+title("Comparisons for Dual-Pivot Quicksort algorithm with Markov's inequality bound coefficient: "*string(Markov_a));
 grid("on");
 
 figure(10);
 plot(L,transpose(DPQS[5,:]),"b-");
-plot(L,(1/3)*L.*log(L), "r-");
+plot(L,0.6*L.*log(L), "r-");
 xlabel("Number of elements");
 ylabel("Number of swaps");
 title("Swaps for Dual-Pivot Quicksort algorithm");
@@ -128,7 +130,7 @@ plot(L,transpose(DPQS[5,:]+Chebyshev_a*sqrt(DPQS[6,:])),"k--");
 plot(L,transpose(DPQS[5,:]-Chebyshev_a*sqrt(DPQS[6,:])),"k--");
 xlabel("Number of elements");
 ylabel("Number of swaps");
-title("Swaps for Dual-Pivot Quicksort algorithm with Chebyshev's inequality bound");
+title("Swaps for Dual-Pivot Quicksort algorithm with Chebyshev's inequality bound coefficient: "*string(Chebyshev_a));
 grid("on");
 
 figure(12);
@@ -141,7 +143,7 @@ plot(L,transpose(DPQS[8,:]),"ro");
 plot(L,transpose(2*DPQS[5,:]),"k--");
 xlabel("Number of elements");
 ylabel("Number of swaps");
-title("Swaps for Dual-Pivot Quicksort algorithm with Markow's inequality bound");
+title("Swaps for Dual-Pivot Quicksort algorithm with Markov's inequality bound coefficient: "*string(Markov_a));
 grid("on");
 
 ###########################################################
@@ -178,6 +180,32 @@ xlabel("Number of elements");
 ylabel("Number of swaps");
 title("Comparison of experimental results");
 grid("on");
+
+###########################################################
+# Comparison of concentration on both algorithms          #
+###########################################################
+figure(17);
+plot(L,transpose(Chebyshev_a*sqrt(QS[2,:])./QS[1,:]),"g--");
+plot(L,transpose(-Chebyshev_a*sqrt(QS[2,:])./QS[1,:]),"g--");
+plot(L,transpose(Chebyshev_a*sqrt(DPQS[2,:])./DPQS[1,:]),"r--");
+plot(L,transpose(-Chebyshev_a*sqrt(DPQS[2,:])./DPQS[1,:]),"r--");
+xlabel("Number of elements");
+ylabel("Number of comparisons");
+title("Comparisons of contentration on both algorithms for comparisons");
+grid("on");
+
+###########################################################
+# Histograms                                              #
+###########################################################
+for i = eachindex(L)[2:length(L)]
+  figure(17+i-1);
+  h=hist(vec(DPQS_t[1,:,i]));
+  bar(2:length(h[1]),h[2],color="#0f87bf",align="center",alpha=0.4);
+  xlabel("Number of comparisons");
+  ylabel("Number of cases for specified comparisons number");
+  title("Histogram of comparisons for Dual-Pivot Quicksort and size of input: "*string(L[i]));
+  grid("on");
+end;
 end
 
 end
