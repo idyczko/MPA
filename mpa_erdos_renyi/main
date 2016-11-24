@@ -1,0 +1,53 @@
+include("vector_helper");
+include("plots");
+
+using LightGraphs;
+using vector_helper;
+using plots;
+
+Markov_a = 2; #Coefficient a (will be multiplied by expected value)
+Chebyshev_a = 2; #Coefficient a (will be multiplied by standard deviation)
+
+attempts=100;
+V=[100:100:1000]; #input data size range
+P=Array(Function, 7);
+P[1]= function f1(n) return 1/(2*n) end;
+P[2]= function f2(n) return 1/n-(2/(n^(4/3))) end;
+P[3]= function f3(n) return 1/n-((n^0.1)/(n^(4/3))) end;
+P[4]= function f4(n) return 1/n end;
+P[5]= function f5(n) return 1/n+((n^0.1)/(n^(4/3))) end;
+P[6]= function f6(n) return 1/n+(2/(n^(4/3))) end;
+P[7]= function f7(n) return 2/n end;
+
+
+CMPN = zeros(length(P), length(V), 4);
+FRST = zeros(length(P), length(V), 4);
+SCND = zeros(length(P), length(V), 4);
+CMPN_t = zeros(length(P), length(V), attempts);
+FRST_t = zeros(length(P), length(V), attempts);
+SCND_t = zeros(length(P), length(V), attempts);
+
+for p in eachindex(P)
+  for v in eachindex(V)
+    for a = 1:attempts
+      G = erdos_renyi(V[v], P[p](V[v]));
+      g = connected_components(G);
+      CMPN_t[p,v,a] = length(g);
+      FRST_t[p,v,a], SCND_t[p,v,a] = select_two_longest(g);
+    end;
+    CMPN[p,v,1]=mean(CMPN_t[p,v,:]);
+    CMPN[p,v,2]=var(CMPN_t[p,v,:]);
+    CMPN[p,v,3]=maximum(CMPN_t[p,v,:]);
+    CMPN[p,v,4]=minimum(CMPN_t[p,v,:]);
+    FRST[p,v,1]=mean(FRST_t[p,v,:]);
+    FRST[p,v,2]=var(FRST_t[p,v,:]);
+    FRST[p,v,3]=maximum(FRST_t[p,v,:]);
+    FRST[p,v,4]=minimum(FRST_t[p,v,:]);
+    SCND[p,v,1]=mean(SCND_t[p,v,:]);
+    SCND[p,v,2]=var(SCND_t[p,v,:]);
+    SCND[p,v,3]=maximum(SCND_t[p,v,:]);
+    SCND[p,v,4]=minimum(SCND_t[p,v,:]);
+  end;
+end;
+
+plots.display_plots(V, P, CMPN, FRST, SCND, CMPN_t, FRST_t, SCND_t, Markov_a, Chebyshev_a);

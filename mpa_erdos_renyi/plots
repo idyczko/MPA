@@ -1,0 +1,102 @@
+module plots
+export display_plots
+using PyPlot;
+
+function display_plots(V, P, CMPN, FRST, SCND, CMPN_t, FRST_t, SCND_t, Markov_a, Chebyshev_a);
+
+for p in eachindex(P)
+  if(p>=4)
+    break;
+  end;
+  figure()
+  for v in eachindex(V)
+    scatter(V[v]*ones(size(FRST_t)[3]), FRST_t[p,v,:], s=10, alpha=0.1, c="b");
+  end;
+  plot(V, transpose(FRST[p,:,1]), "r-");
+  plot(V, transpose(FRST[p,:,3]), "ro");
+  plot(V, transpose(FRST[p,:,4]), "ro");
+  plot(V, transpose(FRST[p,:,1]+Chebyshev_a*sqrt(FRST[p,:,2])), "k--");
+  plot(V, transpose(FRST[p,:,1]-Chebyshev_a*sqrt(FRST[p,:,2])), "k--");
+  plot(V, log(V), "b--");
+  xlabel("Number of vertices");
+  ylabel("Size of largest component");
+  title("Size of largest component for function "*string(p)*" and Chebyshev inequality coefficient "*string(Chebyshev_a));
+  grid("on");
+
+  figure()
+  for v in eachindex(V)
+    scatter(V[v]*ones(size(SCND_t)[3]), SCND_t[p,v,:], s=10, alpha=0.1, c="b");
+  end;
+  plot(V, transpose(SCND[p,:,1]), "r-");
+  plot(V, transpose(SCND[p,:,3]), "ro");
+  plot(V, transpose(SCND[p,:,4]), "ro");
+  plot(V, transpose(SCND[p,:,1]+Chebyshev_a*sqrt(SCND[p,:,2])), "k--");
+  plot(V, transpose(SCND[p,:,1]-Chebyshev_a*sqrt(SCND[p,:,2])), "k--");
+  plot(V, log(V), "b--");
+  xlabel("Number of vertices");
+  ylabel("Size of second largest component");
+  title("Size of second largest component for function "*string(p)*" and Chebyshev inequality coefficient "*string(Chebyshev_a));
+  grid("on");
+
+  figure()
+  plot(V, transpose(FRST[p,:,1]), "b-");
+  plot(V, transpose(SCND[p,:,1]), "g-");
+  plot(V, log(V), "r--");
+  plot(V, 6*log(V), "r--");
+  xlabel("Number of vertices");
+  ylabel("Sizes of components");
+  title("Sizes of components for function "*string(p)*" and Chebyshev inequality coefficient "*string(Chebyshev_a));
+  grid("on");
+end;
+
+for p in eachindex(P)
+  if(p<4)
+    continue;
+  end;
+  figure()
+  for v in eachindex(V)
+    scatter(V[v]*ones(size(FRST_t)[3]), FRST_t[p,v,:], s=10, alpha=0.1, c="b");
+  end;
+  plot(V, transpose(FRST[p,:,1]), "r-");
+  plot(V, transpose(FRST[p,:,3]), "ro");
+  plot(V, transpose(FRST[p,:,4]), "ro");
+  plot(V, transpose(FRST[p,:,1]+Chebyshev_a*sqrt(FRST[p,:,2])), "k--");
+  plot(V, transpose(FRST[p,:,1]-Chebyshev_a*sqrt(FRST[p,:,2])), "k--");
+  plot(V,V.^(2/3),"b--");
+  plot(V, V, "r--");
+  xlabel("Number of vertices");
+  ylabel("Size of largest component");
+  title("Size of largest component for function "*string(p)*" and Chebyshev inequality coefficient "*string(Chebyshev_a));
+  grid("on");
+
+  figure()
+  for v in eachindex(V)
+    scatter(V[v]*ones(size(SCND_t)[3]), SCND_t[p,v,:], s=10, alpha=0.1, c="b");
+  end;
+  plot(V, transpose(SCND[p,:,1]), "r-");
+  plot(V, transpose(SCND[p,:,3]), "ro");
+  plot(V, transpose(SCND[p,:,4]), "ro");
+  plot(V, transpose(SCND[p,:,1]+Chebyshev_a*sqrt(SCND[p,:,2])), "k--");
+  plot(V, transpose(SCND[p,:,1]-Chebyshev_a*sqrt(SCND[p,:,2])), "k--");
+  plot(V, log(V), "b--");
+  plot(V,V.^(2/3),"r--");
+  xlabel("Number of vertices");
+  ylabel("Size of second largest component");
+  title("Size of second largest component for function "*string(p)*" and Chebyshev inequality coefficient "*string(Chebyshev_a));
+  grid("on");
+
+  figure()
+  plot(V, transpose(FRST[p,:,1]), "b-");
+  plot(V, transpose(SCND[p,:,1]), "g-");
+  plot(V, V, "r--");
+  plot(V, log(V), "r--");
+  plot(V,V.^(2/3),"r--");
+  xlabel("Number of vertices");
+  ylabel("Sizes of components");
+  title("Sizes of components for function "*string(p)*" and Chebyshev inequality coefficient "*string(Chebyshev_a));
+  grid("on");
+end;
+
+end
+
+end

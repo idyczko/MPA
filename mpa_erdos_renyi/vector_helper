@@ -1,0 +1,18 @@
+module vector_helper
+export select_two_longest
+
+function select_two_longest(V)
+  second=0;
+  first=0;
+  for i in eachindex(V)
+    if(length(V[i])>first)
+      second=first;
+      first = length(V[i]);
+      continue;
+    end;
+    second = max(second, length(V[i]));
+  end;
+  return first, second;
+end
+
+end
