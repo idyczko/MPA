@@ -1,0 +1,35 @@
+module Plots
+export display_plots
+include("permutations_helper");
+
+using PyPlot;
+using PermutationsHelper;
+
+
+function display_plots(V, F, VF, RESULTS_PROCESSED, RESULTS_ALL, Markov_a, Chebyshev_a)
+
+for vf in eachindex(VF)
+  figure(vf)
+  for v in eachindex(V)
+    scatter(V[v]*ones(size(RESULTS_ALL)[3]), RESULTS_ALL[vf,v,:], s=10, alpha=0.1, c="b");
+  end;
+  plot(V, transpose(RESULTS_PROCESSED[vf,:,1]), "r-");
+  plot(V, transpose(RESULTS_PROCESSED[vf,:,3]), "ro");
+  plot(V, transpose(RESULTS_PROCESSED[vf,:,4]), "ro");
+  plot(V, transpose(RESULTS_PROCESSED[vf,:,1]+Chebyshev_a*sqrt(RESULTS_PROCESSED[vf,:,2])), "k--");
+  plot(V, transpose(RESULTS_PROCESSED[vf,:,1]-Chebyshev_a*sqrt(RESULTS_PROCESSED[vf,:,2])), "k--");
+  xlabel("Number of elements");
+  #ylabel();
+  #title("Size of largest component for function "*string(p)*" and Chebyshev inequality coefficient "*string(Chebyshev_a));
+  grid("on");
+end;
+figure(1);
+plot(V, ones(length(V)), "k-");
+figure(2);
+plot(V, harmonic(convert(Vector{Int64},V))-1, "k-");
+figure(3);
+plot(V, harmonic(convert(Vector{Int64},V))-1, "k-");
+grid("on");
+end;
+
+end
